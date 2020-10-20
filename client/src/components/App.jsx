@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
-import { fetchUser } from "../actions";
+import * as actions from "../actions";
 
 import Header from "./Header";
 import { Landing } from "./Landing";
@@ -11,11 +11,11 @@ const SurveyNew = () => <h2>SurveyNew</h2>;
 
 const App = () => {
   useEffect(() => {
-    fetchUser();
+    actions.fetchUser();
   }, []);
 
   return (
-    <div>
+    <div className="container">
       <BrowserRouter>
         <Header />
         <Route exact path="/" component={Landing} />
@@ -26,4 +26,4 @@ const App = () => {
   );
 };
 
-export default connect(null, { fetchUser })(App);
+export default connect(null, actions)(App);

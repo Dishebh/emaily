@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 const Header = ({ auth }) => {
+  console.log("auth!!", auth);
+
   const renderContent = () => {
     switch (auth) {
       case null:
@@ -36,8 +38,8 @@ const Header = ({ auth }) => {
   );
 };
 
-function mapStateToProps({ auth }) {
-  return { auth };
-}
+const mapStateToProps = (state) => ({
+  auth: state.auth,
+});
 
 export default connect(mapStateToProps)(Header);
