@@ -20,7 +20,7 @@ const Header = ({ auth }) => {
           </li>
         );
       default:
-        break;
+        return;
     }
   };
 

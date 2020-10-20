@@ -10,7 +10,7 @@ router.get(
   })
 );
 
-router.get("auth/google/callback", passport.authenticate("google"));
+router.get("/auth/google/callback", passport.authenticate("google"));
 
 router.get("/api/logout", (req, res) => {
   req.logout();
@@ -18,7 +18,6 @@ router.get("/api/logout", (req, res) => {
 });
 
 router.get("/api/current_user", (req, res) => {
-  console.log("req: ", req.user);
   res.send(req.user);
 });
 
