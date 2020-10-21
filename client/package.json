@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.20.0",
     "http-proxy-middleware": "^1.0.6",
+    "materialize-css": "^1.0.0-rc.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-redux": "^7.2.1",
