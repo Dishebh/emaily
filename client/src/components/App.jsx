@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { connect } from "react-redux";
-import * as actions from "../actions";
+import { fetchUser } from "../actions";
 
 import Header from "./Header";
 import { Landing } from "./Landing";
@@ -9,10 +9,10 @@ import { Landing } from "./Landing";
 const Dashboard = () => <h2>Dashboard</h2>;
 const SurveyNew = () => <h2>SurveyNew</h2>;
 
-const App = () => {
+const App = ({ fetchUser }) => {
   useEffect(() => {
-    actions.fetchUser();
-  }, []);
+    fetchUser();
+  }, [fetchUser]);
 
   return (
     <div className="container">
@@ -26,4 +26,4 @@ const App = () => {
   );
 };
 
-export default connect(null, actions)(App);
+export default connect(null, { fetchUser })(App);

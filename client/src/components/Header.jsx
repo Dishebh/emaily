@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 const Header = ({ auth }) => {
-  console.log("auth!!", auth);
-
   const renderContent = () => {
     switch (auth) {
       case null:
@@ -15,14 +13,12 @@ const Header = ({ auth }) => {
             <a href="/auth/google">Login with Google</a>
           </li>
         );
-      case true:
+      default:
         return (
           <li>
             <a href="/api/logout">Logout</a>
           </li>
         );
-      default:
-        return;
     }
   };
 
