@@ -28,8 +28,8 @@ const Header = ({ auth }) => {
         <Link to={auth ? "/surveys" : "/"} className="left brand-logo">
           Emaily
         </Link>
+        <ul className="right">{renderContent()}</ul>
       </div>
-      <ul className="right">{renderContent()}</ul>
     </nav>
   );
 };
