@@ -4,7 +4,7 @@ const passportServices = (keys, User, GoogleStrategy, passport) => {
   });
   
   passport.deserializeUser((id, done) => {
-    User.findById(id).then((user) => {
+    User.findById(id).then(user => {
       done(null, user);
     });
   });
@@ -14,22 +14,21 @@ const passportServices = (keys, User, GoogleStrategy, passport) => {
       {
         clientID: keys.googleClientID,
         clientSecret: keys.googleClientSecret,
-        callbackURL: "/auth/google/callback",
+        callbackURL: '/auth/google/callback',
+        proxy: true
       },
-      (accessToken, refreshToken, profile, done) => {
-        User.findOne({ googleId: profile.id }).then((existingUser) => {
-          if (existingUser) {
-            // we already have a record with the given profile ID
-            return done(null, existingUser);
-          } else {
-            // we don't have a user record with this ID, make a new record!
-            const user = new User({ googleId: profile.id }).save();
-            return done(null, user);
-          }
-        });
+      async (accessToken, refreshToken, profile, done) => {
+        const existingUser = await User.findOne({ googleId: profile.id });
+  
+        if (existingUser) {
+          return done(null, existingUser);
+        }
+  
+        const user = await new User({ googleId: profile.id }).save();
+        done(null, user);
       }
     )
-  );
+  );  
 }
 
 module.exports = passportServices
