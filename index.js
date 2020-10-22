@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const bodyParser = require('body-parser')
 const cookieSession = require("cookie-session");
 const keys = require("./config/keys");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -19,6 +20,8 @@ mongoose
   })
   .then(() => console.log("Connected to DB!"));
 
+app.use(bodyParser.json());
+
 app.use(morgan("dev"));
 
 passportServices(keys, User, GoogleStrategy, passport)
@@ -34,6 +37,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", require("./routes/authRouter"));
+app.use("/api/stripe", require("./routes/billingRoutes"));
 
 const PORT = keys.PORT || 5000;
 
