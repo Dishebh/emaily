@@ -11,7 +11,7 @@ const User = require("./models/User");
 const app = express();
 
 mongoose
-  .connect(keys.mongoUri, {
+  .connect(keys.mongoURI, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
