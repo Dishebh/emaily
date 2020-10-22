@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Payments } from "./Payments";
+import Payments from "./Payments";
 
 const Header = ({ auth }) => {
   const renderContent = () => {
@@ -16,10 +16,10 @@ const Header = ({ auth }) => {
         );
       default:
         return [
-          <li>
+          <li key="1">
             <Payments />
           </li>,
-          <li>
+          <li key="2">
             <a href="/api/logout">Logout</a>
           </li>,
         ];
