@@ -36,8 +36,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use("/", require("./routes/authRouter"));
+app.use("/", require("./routes/authRoutes"));
 app.use("/api/stripe", require("./routes/billingRoutes"));
+app.use('/api/surveys', require('./routes/surveyRoutes'))
 
 const PORT = keys.PORT || 5000;
 

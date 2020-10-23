@@ -21,7 +21,15 @@ const SurveySchema = new mongoose.Schema({
   no: {
     type: Number,
     default: 0
-}
+    },
+    _user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    dateSent: {
+        type: Date,
+        default: Date.now()
+    }
 });
 
 const Survey = mongoose.model("Survey", SurveySchema);
