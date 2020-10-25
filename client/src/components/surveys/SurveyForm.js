@@ -11,7 +11,19 @@ const FIELDS = [
   { label: 'Recipeient List', name: 'emails' },
 ]
 
-const SurveyForm = () => {
+const validate = (values) => {
+    const errors = {}
+
+    _.each(FIELDS, ({ name }) => {
+        if (!values[name]) {
+            errors[name] = 'You must provide a value!'
+        }
+    })
+
+    return errors
+}
+
+const SurveyForm = ({ handleSubmit }) => {
     const renderFields = () => {
         return _.map(FIELDS, ({ label, name }) => {
             return <Field
@@ -24,13 +36,9 @@ const SurveyForm = () => {
         })
     }
 
-    const handleSubmit = (values) => {
-        console.log('values: ', values);
-    }
-
     return (
         <div>
-            <form onSubmit={values => handleSubmit(values)}>
+            <form onSubmit={handleSubmit((values) => console.log(values))}>
                 {renderFields()}
                 <Link to='/surveys' className='red btn-flat white-text'>
                     Cancel
@@ -44,4 +52,7 @@ const SurveyForm = () => {
     )
 }
 
-export default reduxForm({ form: 'surveyForm' })(SurveyForm)
+export default reduxForm({
+    validate, 
+    form: 'surveyForm'
+})(SurveyForm)
