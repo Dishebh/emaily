@@ -3,6 +3,7 @@ import  _ from 'lodash'
 import { Link } from 'react-router-dom'
 import { reduxForm, Field } from 'redux-form'
 import { SurveyField } from './SurveyField'
+import { validateEmail } from '../../utils/validateEmail'
 
 const FIELDS = [
     { label: 'Survey Title', name: 'title' },
@@ -20,6 +21,7 @@ const validate = (values) => {
         }
     })
 
+    errors.emails = validateEmail(values.emails || '')
     return errors
 }
 
