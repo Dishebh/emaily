@@ -25,7 +25,7 @@ const validate = (values) => {
     return errors
 }
 
-const SurveyForm = ({ handleSubmit }) => {
+const SurveyForm = ({ onSurveySubmit }) => {
     const renderFields = () => {
         return _.map(FIELDS, ({ label, name }) => {
             return <Field
@@ -40,7 +40,7 @@ const SurveyForm = ({ handleSubmit }) => {
 
     return (
         <div>
-            <form onSubmit={handleSubmit((values) => console.log(values))}>
+            <form onSubmit={onSurveySubmit}>
                 {renderFields()}
                 <Link to='/surveys' className='red btn-flat white-text'>
                     Cancel
