@@ -7,7 +7,7 @@ import { fetchUser } from "../actions";
 import Header from "./Header";
 import { Landing } from "./Landing";
 import { Dashboard } from "./Dashboard";
-import { SurveyNew } from "./surveys/SurveyNew";
+import SurveyNew from "./surveys/SurveyNew";
 
 const App = ({ fetchUser }) => {
   useEffect(() => {

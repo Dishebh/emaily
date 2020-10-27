@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import SurveyForm from './SurveyForm'
 import SurveyFormReview from './SurveyFormReview'
 
-export const SurveyNew = () => {
-    let showFormReview = false;
-
+const SurveyNew = ({ showFormReview }) => {
     const renderContent = () => {
+        console.log('ShowFormReview: ', showFormReview);
+
         if (showFormReview) {
             return <SurveyFormReview
                     onCancel={() => showFormReview = false} 
@@ -23,3 +23,5 @@ export const SurveyNew = () => {
         </div>
     )
 }
+
+export default SurveyNew
