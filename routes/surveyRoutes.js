@@ -2,6 +2,7 @@ const express = require("express");
 const sgMail = require('@sendgrid/mail')
 const Survey = require("../models/Survey");
 const keys = require("../config/keys");
+const surveyTemplate = require('../services/emailTemplates/surveyTemplate')
 
 const router = express.Router();
 
@@ -15,25 +16,27 @@ router.post('/', async (req, res) => {
             title,
             subject,
             body,
-            recipients: recipients.split(',').map(email => { email }),
+            recipients: recipients.split(',').map(email => ({ email })),
             _user: req.user.id,
         })
 
-        const msg = {
-            to: 'dishebhb@gmail.com',
-            from: 'dishebh27@example.com', // Use the email address or domain you verified above
-            subject: 'Sending with Twilio SendGrid is Fun',
-            text: 'and easy to do anywhere, even with Node.js',
-            html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-          };
-          console.log('message!!');
+        await survey.save()
 
-        const message = await sgMail.send(msg)
-        console.log('message!!', message);
+        const toEmails = survey.recipients.map(({ email }) => email);
+
+        const msg = {
+            to: toEmails,
+            from: 'dishebh27@gmail.com', // Use the email address or domain you verified above
+            subject: subject,
+            html: surveyTemplate(survey),
+          };
+
+        await sgMail.send(msg)
 
         res.send(survey)
     } catch (err) {
-        res.send({ error: err })
+        console.error('Error!!', err);
+        res.send({ error: err.response.body.errors })
     }
 })
 
