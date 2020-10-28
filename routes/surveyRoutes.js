@@ -8,6 +8,15 @@ const router = express.Router();
 
 sgMail.setApiKey(keys.sendgridApiKey)
 
+router.get('/thanks', (req, res) => {
+    res.send('Thanks for voting!')
+})
+
+router.post('/webhooks', (req, res) => {
+    console.log('webhooks body: ', req.body);
+    res.send('webhook called!')
+})
+
 router.post('/', async (req, res) => {
     try {
         const { title, subject, body, recipients } = req.body;
