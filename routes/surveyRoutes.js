@@ -1,52 +1,62 @@
+const _ = require("lodash");
+const { Path } = require("path-parser");
+const { URL } = require("url");
 const express = require("express");
-const sgMail = require('@sendgrid/mail')
+const sgMail = require("@sendgrid/mail");
 const Survey = require("../models/Survey");
 const keys = require("../config/keys");
-const surveyTemplate = require('../services/emailTemplates/surveyTemplate')
+const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
 
 const router = express.Router();
 
-sgMail.setApiKey(keys.sendgridApiKey)
+sgMail.setApiKey(keys.sendgridApiKey);
 
-router.get('/thanks', (req, res) => {
-    res.send('Thanks for voting!')
-})
+router.get("/thanks", (req, res) => {
+  res.send("Thanks for voting!");
+});
 
-router.post('/webhooks', (req, res) => {
-    console.log('webhooks body: ', req.body);
-    res.send('webhook called!')
-})
+router.post("/webhooks", (req, res) => {
+  console.log("webhooks body: ", req.body);
 
-router.post('/', async (req, res) => {
-    try {
-        const { title, subject, body, recipients } = req.body;
+  const events = _.map(req.body, (event) => {
+    const pathname = new URL(event.url).pathname;
+    const p = new Path("/api/surveys/:surveyId/:choice");
+    console.log(p.test(pathname));
+  });
 
-        const survey = new Survey({
-            title,
-            subject,
-            body,
-            recipients: recipients.split(',').map(email => ({ email })),
-            _user: req.user.id,
-        })
+  res.send("webhook called!");
+});
 
-        await survey.save()
+router.post("/", async (req, res) => {
+  try {
+    const { title, subject, body, recipients } = req.body;
 
-        const toEmails = survey.recipients.map(({ email }) => email);
+    const survey = new Survey({
+      title,
+      subject,
+      body,
+      recipients: recipients.split(",").map((email) => ({ email })),
+      _user: req.user.id,
+    });
 
-        const msg = {
-            to: toEmails,
-            from: 'dishebh27@gmail.com', // Use the email address or domain you verified above
-            subject: subject,
-            html: surveyTemplate(survey),
-          };
+    await survey.save();
 
-        await sgMail.send(msg)
+    const toEmails = survey.recipients.map(({ email }) => email);
 
-        res.send(survey)
-    } catch (err) {
-        console.error('Error!!', err);
-        res.send({ error: err.response.body.errors })
-    }
-})
+    const msg = {
+      to: toEmails,
+      from: "dishebh27@gmail.com", // Use the email address or domain you verified above
+      subject: subject,
+      html: surveyTemplate(survey),
+    };
+
+    await sgMail.send(msg);
+
+    res.send(survey);
+  } catch (err) {
+    console.error("Error!!", err);
+    res.send({ error: err.response.body.errors });
+  }
+});
 
 module.exports = router;

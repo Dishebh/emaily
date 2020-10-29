@@ -2,12 +2,12 @@ const express = require("express");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("passport");
-const bodyParser = require('body-parser')
+const bodyParser = require("body-parser");
 const cookieSession = require("cookie-session");
 const keys = require("./config/keys");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("./models/User");
-const passportServices = require('./services/passport')
+const passportServices = require("./services/passport");
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 
 app.use(morgan("dev"));
 
-passportServices(keys, User, GoogleStrategy, passport)
+passportServices(keys, User, GoogleStrategy, passport);
 
 app.use(
   cookieSession({
@@ -38,7 +38,7 @@ app.use(passport.session());
 
 app.use("/", require("./routes/authRoutes"));
 app.use("/api/stripe", require("./routes/billingRoutes"));
-app.use('/api/surveys', require('./routes/surveyRoutes'))
+app.use("/api/surveys", require("./routes/surveyRoutes"));
 
 const PORT = keys.PORT || 5000;
 

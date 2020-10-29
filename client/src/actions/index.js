@@ -15,32 +15,32 @@ export const fetchUser = () => async (dispatch) => {
 
 export const handleToken = (token) => async (dispatch) => {
   try {
-    const res = await axios.post('/api/stripe', token)
+    const res = await axios.post("/api/stripe", token);
 
     dispatch({
       type: FETCH_USER,
-      payload: res.data
-    })
+      payload: res.data,
+    });
   } catch (err) {
     dispatch({
-      type: FETCH_ERROR
-    })
+      type: FETCH_ERROR,
+    });
   }
-} 
+};
 
 export const submitSurvey = (values, history) => async (dispatch) => {
   try {
-    const res = await axios.post('/api/surveys', values)
+    const res = await axios.post("/api/surveys", values);
 
-    history.push('/surveys')
+    history.push("/surveys");
 
     dispatch({
       type: FETCH_USER,
-      payload: res.data
-    })
+      payload: res.data,
+    });
   } catch (err) {
     dispatch({
-      type: FETCH_ERROR
-    })
+      type: FETCH_ERROR,
+    });
   }
-} 
+};
