@@ -6,18 +6,25 @@ const sgMail = require("@sendgrid/mail");
 const Survey = require("../models/Survey");
 const keys = require("../config/keys");
 const surveyTemplate = require("../services/emailTemplates/surveyTemplate");
+const requireLogin = require('../middlewares/requireLogin')
 
 const router = express.Router();
 
 sgMail.setApiKey(keys.sendgridApiKey);
+
+router.get('/', requireLogin, async (req, res) => {
+  const surveys = await Survey.find({ _user: req.user.id }).select({
+    recipients: false
+  })
+
+  res.send(surveys)
+})
 
 router.get("/:surveyId/:choice", (req, res) => {
   res.send("Thanks for voting!");
 });
 
 router.post("/webhooks", (req, res) => {
-  console.log("webhooks body: ", req.body);
-
   const p = new Path("/api/surveys/:surveyId/:choice");
 
   const events = _.chain(req.body)
@@ -46,8 +53,6 @@ router.post("/webhooks", (req, res) => {
       ).exec();
     })
     .value()
-
-  console.log('events: ', events);
 
   res.send("webhook called!");
 });
