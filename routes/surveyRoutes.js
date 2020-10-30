@@ -25,36 +25,41 @@ router.get("/:surveyId/:choice", (req, res) => {
 });
 
 router.post("/webhooks", (req, res) => {
-  const p = new Path("/api/surveys/:surveyId/:choice");
+  try {
+    const p = new Path("/api/surveys/:surveyId/:choice");
 
-  const events = _.chain(req.body)
-    .map(({ email, url }) => {
-      const match = p.test(new URL(url).pathname);
+    _.chain(req.body)
+      .map(({ email, url }) => {
+        const match = p.test(new URL(url).pathname);
 
-      if (match) {
-        return { email, surveyId: match.surveyId, choice: match.choice };
-      }
-    })
-    .compact()
-    .uniqBy('email', 'surveyId')
-    .each(({ surveyId, email, choice }) => {
-      Survey.updateOne(
-        {
-          _id: surveyId,
-          recipients: {
-            $elemMatch: { email: email, responded: false }
-          }
-        },
-        {
-          $inc: { [choice]: 1 },
-          $set: { 'recipients.$.responded': true },
-          lastResponded: new Date()
+        if (match) {
+          return { email, surveyId: match.surveyId, choice: match.choice };
         }
-      ).exec();
-    })
-    .value()
+      })
+      .compact()
+      .uniqBy('email', 'surveyId')
+      .each(({ surveyId, email, choice }) => {
+        Survey.updateOne(
+          {
+            _id: surveyId,
+            recipients: {
+              $elemMatch: { email: email, responded: false }
+            }
+          },
+          {
+            $inc: { [choice]: 1 },
+            $set: { 'recipients.$.responded': true },
+            lastResponded: new Date()
+          }
+        ).exec();
+      })
+      .value()
 
-  res.send("webhook called!");
+    res.send("webhook called!");
+  } catch (err) {
+    console.error('ERROR!!', err);
+    res.send(err)
+  }
 });
 
 router.post("/", async (req, res) => {
