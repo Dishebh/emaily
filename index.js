@@ -1,5 +1,4 @@
 const express = require("express");
-const morgan = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
@@ -22,7 +21,10 @@ mongoose
 
 app.use(bodyParser.json());
 
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === 'development') {
+  const morgan = require("morgan");
+  app.use(morgan("dev"));
+}
 
 passportServices(keys, User, GoogleStrategy, passport);
 
